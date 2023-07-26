@@ -1,6 +1,6 @@
 <template>
-  <a-layout-footer :style="{ textAlign: 'center' }">
-    Ant Design ©2018 Created by Ant UED
+  <a-layout-footer :style="{ height: '14px', padding: '0' }">
+    <!-- Ant Design ©2018 Created by Ant UED -->
   </a-layout-footer>
 </template>
 
@@ -13,3 +13,6 @@ export default {
   }
 }
 </script>
+
+<style>
+</style>

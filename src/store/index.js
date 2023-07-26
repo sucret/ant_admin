@@ -1,6 +1,8 @@
 import { createStore } from "vuex"
 
 import app from './modules/app'
+import user from './modules/user'
+import getters from './getters'
 
 // const store = createStore({
 //   // 初始化state函数，其中保存的是所有组件共享的数据
@@ -22,6 +24,8 @@ import app from './modules/app'
 
 export default createStore({
   modules: {
-    app
-  }
+    app,
+    user
+  },
+  getters
 })

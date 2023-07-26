@@ -1,6 +1,6 @@
 <template>
   <!-- 右侧header -->
-  <a-layout-header :style="{ background: theme == 'dark' ? '#001529' : '#fff', padding: 0, position: 'fixed', zIndex: 1, width: collapsed ? 'calc(100% - 80px)' : 'calc(100% - 200px)' }">
+  <a-layout-header :style="{ background: theme == 'dark' ? '#001529' : '#fff', padding: 0, position: 'fixed', zIndex: 1, width: collapsed ? 'calc(100% - 80px)' : 'calc(100% - 200px)', borderBottom: '1px solid rgba(5, 5, 5, 0.06)' }">
     <div class="header-left-side" >
       <menu-unfold-outlined
         class="trigger"
@@ -19,9 +19,10 @@
         :theme="theme"
         mode="horizontal"
         :style="{ lineHeight: '50px', height: '50px', float: 'left' }"
-        :items="menuList"/>
+        @click="menuClick"
+        :items="menu"/>
     </div>
-    <div class="header-right-side" :style="{ background: theme == 'dark' ? '#001529' : '#fff' }" style="position: fixed; right: 0; height: 50px;">
+    <div class="header-right-side" :style="{ background: theme == 'dark' ? '#001529' : '#fff' }" style="position: fixed; right: 0; height: 50px; border-bottom: 1px solid rgba(5, 5, 5, 0.06);">
       <a-dropdown class="avatar-dropdown" arrow>
         <a class="ant-dropdown-link" @click.prevent>
           <DownOutlined :style="{ color: theme == 'dark' ? 'rgba(255, 255, 255, 0.65)' : 'rgba(0, 0, 0, 0.88)' }" style="display: block;float: right; line-height: 54px; width: 30px;font-size: 12px;padding-right: 30px;"/>
@@ -79,6 +80,8 @@ import { h } from 'vue';
 
 import { mapState } from 'vuex'
 
+import store from '../../store'
+
 export default {
   name: 'RightSideHeaderLayout',
   components: {
@@ -94,7 +97,6 @@ export default {
   },
   data() {
     return {
-      menuList: menuList,
       topSelectedKey: ['app']
     }
   },
@@ -104,36 +106,27 @@ export default {
     },
     changeCollapsed() {
       this.$store.commit('CHANGE_SIDE_COLLAPSED')
-    }
+    },
+    menuClick({ key }) {
+      store.dispatch('SetLeftMenu', key).then(res => {
+        console.log('SetLeftMenu', res)
+      })
+      // console.log('menuClick', key)
+      // 获取到当前的key,并且跳转
+      // this.$router.push({
+      //   path: key
+      // })
+    },
   },
   mounted: function () {
     localStorage.setItem('a', JSON.stringify({ a: 123, b: 'afwne' }))
   },
   computed: mapState({
     theme: state => state.app.theme,
-    collapsed: state => state.app.sideCollapsed
+    collapsed: state => state.app.sideCollapsed,
+    menu: state => state.user.topMenu
   })
 }
-
-const menuList = [{
-  key: 'mail',
-  icon: () => h(DashboardOutlined),
-  label: '仪表盘',
-}, {
-  key: 'app',
-  icon: () => h(AppstoreOutlined),
-  label: 'Navigation Two'
-}, {
-  key: 'sub1',
-  icon: () => h(SettingOutlined),
-  label: 'Navigation Three'
-}, {
-  key: 'alipay',
-  label: h('a', {
-    href: 'https://antdv.com',
-    target: '_blank',
-  }, 'Navigation Four - Link')
-}]
 </script>
 
 <style scoped>

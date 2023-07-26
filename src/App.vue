@@ -1,31 +1,20 @@
 <template>
+  <router-view></router-view>
   <!-- 水印，需要展示时放开注释 -->
   <!-- <a-watermark content="Ant Design Vue" :font="{ fontSize: 16 }"> -->
-  <a-layout has-sider>
+  <!-- <a-layout has-sider> -->
     <!-- 左侧+侧边栏 -->
-    <LeftSideLayout />
+    <!-- <LeftSideLayout /> -->
     <!-- 右侧 -->
-    <RightSideLayout />
-  </a-layout>
+    <!-- <RightSideLayout /> -->
+  <!-- </a-layout> -->
   <!-- </a-watermark> -->
 </template>
 
 <script>
-import { LeftSideLayout, RightSideLayout } from './layout/index.js'
+// import { LeftSideLayout, RightSideLayout } from './layout/index.js'
 
 export default {
-  name: 'App',
-  components: {
-    LeftSideLayout,
-    RightSideLayout
-  },
-  data() {
-    return {
-      layoutSetting: {
-        collapsed: false,
-        theme: 'light'
-      }
-    }
-  }
+  name: 'App'
 }
 </script>
