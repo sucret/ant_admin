@@ -15,7 +15,7 @@ router.beforeEach(async (to, from) => {
     console.log('store.getters.token', store.getters.token)
 
     // 判断store里边有没有存储用户信息，如果没有则需要获取一下用户信息
-    if (!store.getters.token) {
+    if (!store.getters.nickname) {
       store.dispatch('GetUserInfo').then(res => {
         console.log(res)
       })

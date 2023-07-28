@@ -1,5 +1,12 @@
 import { h } from 'vue';
-import { PieChartOutlined, MailOutlined, DesktopOutlined, InboxOutlined, AppstoreOutlined } from '@ant-design/icons-vue';
+import {
+  PieChartOutlined,
+  MailOutlined,
+  DesktopOutlined,
+  InboxOutlined,
+  AppstoreOutlined
+} from '@ant-design/icons-vue';
+import VueCookie from 'vue-cookie'
 
 const menu = [
   {
@@ -34,6 +41,7 @@ const menu = [
       key: '7',
       label: '用户管理',
       title: 'Option 7',
+      icon: () => h(MailOutlined),
     }, {
       key: '8',
       label: 'Option 8',
@@ -81,6 +89,7 @@ const user = {
   mutations: {
     SET_TOKEN: (state, token) => {
       state.token = token
+      VueCookie.set('token', token)
     },
     SET_USER_INFO: (state, user) => {
 
@@ -128,6 +137,9 @@ const user = {
         //   resolve(1233)
         // }, 3000);
       })
+    },
+    Login ({ commit }, token) {
+
     }
   }
 }

@@ -16,8 +16,8 @@
           @finish="onFinish"
           @finishFailed="onFinishFailed"
           style="margin-top: 20px;">
-          <a-form-item label="Username" name="username" :rules="[{ required: true, message: 'Please input your username!' }]">
-            <a-input v-model:value="formState.username">
+          <a-form-item label="Mobile" name="mobile" :rules="[{ required: true, message: 'Please input your mobile!' }]">
+            <a-input v-model:value="formState.mobile">
               <template #prefix>
                 <UserOutlined class="site-form-item-icon" />
               </template>
@@ -46,6 +46,9 @@
 <script>
 import { UserOutlined, LockOutlined } from '@ant-design/icons-vue';
 
+import { adminLogin } from '@/api/admin'
+// import store from '@/store'
+
 export default {
   name: 'LoginView',
   components: {
@@ -55,15 +58,23 @@ export default {
   data() {
     return {
       formState: {
-        username: '',
+        mobile: '',
         password: ''
       }
     }
   },
   methods: {
     onFinish(values) {
-      console.log('Success:', values);
-      this.$message.loading('登陆中')
+      console.log('Success:', values, this.formState);
+      
+      adminLogin(this.formState).then(res => {
+        console.log('login', res)
+        this.$store.commit('SET_TOKEN', res.access_token)
+
+        this.$router.push('/dashboard')
+      }).catch(err => {
+        this.$message.error(err)
+      })
     },
     onFinishFailed(errorInfo) {
        console.log('Failed:', errorInfo);
