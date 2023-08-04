@@ -6,6 +6,8 @@ import { VueAxios } from './axios'
 // import VueCookie from 'vue-cookie'
 // import Vue from 'vue'
 // import message from 'ant-design-vue/es/message'
+import VueCookie from 'vue-cookie'
+import router from '../router'
 
 // 创建 axios 实例
 const request = axios.create({
@@ -16,6 +18,7 @@ const request = axios.create({
 
 // 异常拦截处理器
 const errorHandler = (error) => {
+  console.log('error', error)
   // if (error.response) {
   //   const data = error.response.data
   //   // 从 localstorage 获取 token
@@ -45,9 +48,13 @@ const errorHandler = (error) => {
 
 // request interceptor
 request.interceptors.request.use(config => {
-  console.log('request', config.data, config.request)
+  console.log('request', config, config.request)
   // const token = VueCookie.get('token')
+  const token = VueCookie.get('token')
 
+  if (config.url != '/login') {
+    config.headers['Authorization'] = 'Bearer ' + token
+  }
   // // 如果 token 存在
   // // 让每个请求携带自定义 token 请根据实际情况自行修改
   // if (config.url !== '/login' && token === '') {
@@ -67,9 +74,17 @@ request.interceptors.request.use(config => {
 // response interceptor
 request.interceptors.response.use((response) => {
   console.log('response', response.data)
+
+  if(response.data.error_code == 40100) {
+    console.log('del_token', VueCookie.delete('token'));
+    router.push({ path: '/login' })
+  }
+  
   if (response.data.error_code) {
     return Promise.reject(response.data.message)
   }
+
+  
   // if (response.data.error_code >= 40000) {
   //   message.error(response.data.message)
   //   if (parseInt(response.data.error_code) === 40100) {

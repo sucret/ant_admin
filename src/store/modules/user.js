@@ -4,7 +4,13 @@ import {
   MailOutlined,
   DesktopOutlined,
   InboxOutlined,
-  AppstoreOutlined
+  AppstoreOutlined,
+  LineChartOutlined,
+  UnorderedListOutlined,
+  ToolOutlined,
+  ScheduleOutlined,
+  DatabaseOutlined,
+  CloudServerOutlined
 } from '@ant-design/icons-vue';
 import VueCookie from 'vue-cookie'
 
@@ -12,7 +18,7 @@ const menu = [
   {
     key: 'dashboard1',
     icon: () => h(PieChartOutlined),
-    label: '仪表盘',
+    label: '工作台',
     children: [
       {
         key: '/dashboard',
@@ -32,20 +38,49 @@ const menu = [
       key: '5',
       label: '权限管理',
       icon: () => h(MailOutlined),
-    }, {
-      key: '6',
-      label: '角色管理',
-      title: 'Option 6',
-      icon: () => h(MailOutlined),
-    }, {
-      key: '7',
-      label: '用户管理',
-      title: 'Option 7',
-      icon: () => h(MailOutlined),
-    }, {
-      key: '8',
-      label: 'Option 8',
-      title: 'Option 8',
+      children: [
+        {
+          key: 'menu',
+          label: '菜单管理',
+          icon: () => h(UnorderedListOutlined)
+        },{
+        key: '/role/list',
+        label: '角色管理',
+        title: 'Option 6',
+        icon: () => h(MailOutlined),
+      }, {
+        key: '/admin/list',
+        label: '用户管理',
+        title: 'Option 7',
+        icon: () => h(MailOutlined),
+      }]
+    },{
+      key: 'system_tool',
+      label: '系统工具',
+      title: '系统工具',
+      icon: () => h(CloudServerOutlined),
+      children: [{
+        key: '8',
+        label: '系统日志',
+        title: '系统日志',
+        icon: () => h(LineChartOutlined),
+      },{
+        key: '9',
+        label: '操作日志',
+        title: '操作日志',
+        icon: () => h(LineChartOutlined),
+      },{
+        key: '10',
+        label: '任务管理',
+        title: '任务管理',
+        icon: () => h(ScheduleOutlined),
+      },
+      {
+        key: '11',
+        label: '数据库工具',
+        title: '数据库工具',
+        icon: () => h(DatabaseOutlined),
+      }]
     }],
   }, {
     key: 'sub2',
@@ -89,7 +124,7 @@ const user = {
   mutations: {
     SET_TOKEN: (state, token) => {
       state.token = token
-      VueCookie.set('token', token)
+      // VueCookie.set('token', token)
     },
     SET_USER_INFO: (state, user) => {
 
@@ -110,6 +145,7 @@ const user = {
       for(k in state.menu) {
         if (key == state.menu[k].key) {
           commit('SET_LEFT_MENU', state.menu[k].children)
+          break;
         }
       }
     },
@@ -127,6 +163,7 @@ const user = {
 
         console.log('menuList', topMenuList, leftMenuList)
 
+        commit('SET_TOKEN', VueCookie.get('token'))
         commit('SET_MENU', menu)
         commit('SET_TOP_MENU', topMenuList)
         commit('SET_LEFT_MENU', leftMenuList)

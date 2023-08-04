@@ -76,8 +76,6 @@ import {
   DashboardOutlined
 } from '@ant-design/icons-vue'
 
-import { h } from 'vue';
-
 import { mapState } from 'vuex'
 
 import store from '../../store'

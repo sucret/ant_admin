@@ -19,6 +19,16 @@ const router = createRouter({
           name: 'workbench',
           component: () => import('../views/dashboard/WorkbenchView.vue'),
           // meta: { transition: 'slide-left' },
+        },
+        {
+          path: 'admin/list',
+          name: 'adminList',
+          component: () => import('@/views/admin/AdminListView.vue')
+        },
+        {
+          path: 'role/list',
+          name: 'roleList',
+          component: () => import('@/views/role/RoleListView.vue')
         }
       ]
     },

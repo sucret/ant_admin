@@ -15,7 +15,11 @@
           name="normal_login"
           @finish="onFinish"
           @finishFailed="onFinishFailed"
-          style="margin-top: 20px;">
+          style="margin-top: 20px;"
+          v-bind="{
+            labelCol: { span: 6 },
+            wrapperCol: { span: 18 },
+          }">
           <a-form-item label="Mobile" name="mobile" :rules="[{ required: true, message: 'Please input your mobile!' }]">
             <a-input v-model:value="formState.mobile">
               <template #prefix>
@@ -48,6 +52,7 @@ import { UserOutlined, LockOutlined } from '@ant-design/icons-vue';
 
 import { adminLogin } from '@/api/admin'
 // import store from '@/store'
+import VueCookie from 'vue-cookie'
 
 export default {
   name: 'LoginView',
@@ -69,7 +74,10 @@ export default {
       
       adminLogin(this.formState).then(res => {
         console.log('login', res)
-        this.$store.commit('SET_TOKEN', res.access_token)
+        // this.$store.commit('SET_TOKEN', res.access_token)
+
+        // 登陆完成之后设置token
+        VueCookie.set('token', res.access_token)
 
         this.$router.push('/dashboard')
       }).catch(err => {

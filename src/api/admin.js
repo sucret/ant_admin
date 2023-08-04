@@ -8,6 +8,13 @@ export function adminLogin (data) {
   })
 }
 
+export function adminList () {
+  return request({
+    method: 'get',
+    url: '/admin/list'
+  })
+}
+
 // export function getAdminList () {
 //   return request({
 //     url: '/admin/list',
@@ -15,18 +22,18 @@ export function adminLogin (data) {
 //   })
 // }
 
-// export function getAdminDetail (adminId) {
-//   return request({
-//     url: '/admin/detail',
-//     method: 'get',
-//     params: { admin_id: adminId }
-//   })
-// }
+export function getAdminDetail (adminId) {
+  return request({
+    url: '/admin/detail',
+    method: 'get',
+    params: { admin_id: adminId }
+  })
+}
 
-// export function saveAdmin (data) {
-//   return request({
-//     url: '/admin/save',
-//     method: 'post',
-//     data: data
-//   })
-// }
+export function saveAdmin (data) {
+  return request({
+    url: '/admin/save',
+    method: 'post',
+    data: data
+  })
+}
