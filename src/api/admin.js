@@ -37,3 +37,11 @@ export function saveAdmin (data) {
     data: data
   })
 }
+
+export function getAdminProfile ()
+{
+  return request({
+    url: '/profile',
+    method: 'get'
+  })
+}

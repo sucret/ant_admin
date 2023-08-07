@@ -7,17 +7,15 @@ import { useUserStore } from './store/user'
 import { useAppStore } from './store/app'
 import { pinia } from './store/pinia'
 
-const userStore = useUserStore(pinia)
-const appStore = useAppStore(pinia)
-
 const LOGIN_ROUTER_PATH = '/login'
 const DEFAULT_ROUTER_PATH = '/dashboard'
 
 
 router.beforeEach(async (to, from) => {
   const token = VueCookie.get('token')
-  // VueCookie.set('token23', 12334566)
 
+  let userStore = useUserStore(pinia)
+  let appStore = useAppStore(pinia)
   console.log(to.fullPath)
   console.log('beforeEach', from, to, token)
   if (token) {
@@ -28,7 +26,6 @@ router.beforeEach(async (to, from) => {
         userStore.initMenu(to.fullPath)
       })
     }
-
 
     // 如果已经登陆则跳转到默认页面
     if (to.path == LOGIN_ROUTER_PATH) {

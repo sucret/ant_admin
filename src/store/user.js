@@ -16,6 +16,8 @@ import {
 import VueCookie from 'vue-cookie'
 import router from '../router'
 
+import { getAdminProfile } from '@/api/admin.js'
+
 const menu = [
   {
     key: 'dashboard1',
@@ -131,23 +133,47 @@ export const useUserStore = defineStore('user', {
   },
   actions: {
     getUserInfo () {
+      // getAdminProfile().then(res => {
+      //   console.log('adminProfile', res)
+
+      //   let leftMenuList = []
+      //   let topMenuList = []
+      //   let k = 0
+      //   for(k in menu) {
+      //     if (k == 0) {
+      //       leftMenuList = menu[k].children
+      //     }
+      //     topMenuList.push({ key: menu[k].key, icon: menu[k].icon, label: menu[k].label })
+      //   }
+
+      //   this.topMenu = topMenuList
+      //   this.leftMenu = leftMenuList
+      //   this.token = VueCookie.get('token')
+      //   this.menu = menu
+        
+      // })
       return new Promise((resolve, reject) => {
-        let leftMenuList = []
-        let topMenuList = []
-        let k = 0
-        for(k in menu) {
-          if (k == 0) {
-            leftMenuList = menu[k].children
+
+        getAdminProfile().then(res => {
+          this.nickname = res.nickname
+
+          let leftMenuList = []
+          let topMenuList = []
+          let k = 0
+          for(k in menu) {
+            if (k == 0) {
+              leftMenuList = menu[k].children
+            }
+            topMenuList.push({ key: menu[k].key, icon: menu[k].icon, label: menu[k].label })
           }
-          topMenuList.push({ key: menu[k].key, icon: menu[k].icon, label: menu[k].label })
-        }
 
-        this.topMenu = topMenuList
-        this.leftMenu = leftMenuList
-        this.token = VueCookie.get('token')
-        this.menu = menu
+          this.topMenu = topMenuList
+          this.leftMenu = leftMenuList
+          this.token = VueCookie.get('token')
+          this.menu = menu
 
-        resolve()
+          resolve()
+        })
       })
     },
     setLeftMenu (key) {

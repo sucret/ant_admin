@@ -26,7 +26,7 @@
       <a-dropdown class="avatar-dropdown" arrow>
         <a class="ant-dropdown-link" @click.prevent>
           <DownOutlined :style="{ color: theme == 'dark' ? 'rgba(255, 255, 255, 0.65)' : 'rgba(0, 0, 0, 0.88)' }" style="display: block;float: right; line-height: 54px; width: 30px;font-size: 12px;padding-right: 30px;"/>
-          <p class="nickname" :style="{ color: theme == 'dark' ? 'rgba(255, 255, 255, 0.65)' : 'rgba(0, 0, 0, 0.88)' }">鲍叔牙</p>
+          <p class="nickname" :style="{ color: theme == 'dark' ? 'rgba(255, 255, 255, 0.65)' : 'rgba(0, 0, 0, 0.88)' }">{{ nickname }}</p>
           <div class="avatar-box">
             <a-avatar shape="square" style="display: block; margin-top: 10px; background-color: #f56a00;">
               <template #icon><UserOutlined /></template>
@@ -84,7 +84,7 @@ const appStore = useAppStore()
 const { theme, sideCollapsed } = storeToRefs(appStore)
 
 const userStore = useUserStore()
-const { topMenu, topSelectedKey } = storeToRefs(userStore)
+const { topMenu, topSelectedKey, nickname } = storeToRefs(userStore)
 
 const changeTheme = () => {
   appStore.changeTheme()
