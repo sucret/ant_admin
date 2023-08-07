@@ -26,9 +26,9 @@
         :detail="state.detail"
         :readonly="state.modalReadonly"
         style="padding-top: 30px"/>
-      <template #footer>
+      <template #footer >
         <a-button key="back" @click="handleCancel">取消</a-button>
-        <a-button key="submit" type="primary" :loading="state.loading" @click="saveAdminInfo">提交</a-button>
+        <a-button v-show="!state.modalReadonly" key="submit" type="primary" :loading="state.loading" @click="saveAdminInfo">提交</a-button>
       </template>
       <!-- <p>Some contents...</p>
       <p>Some contents...</p>
@@ -103,7 +103,7 @@ const getAdminList = () => {
 
 const showDetail = (adminId, readonly) => {
   getAdminDetail(adminId).then(res => {
-    console.log('detail', res)
+    // console.log('detail', res)
     res.role = []
     let k = 0
     for (k in res.role_info) {
@@ -123,9 +123,9 @@ onMounted(async () => {
 
 const saveAdminInfo = () => {
   state.loading = true
-  console.log(state.detail)
+  // console.log(state.detail)
   saveAdmin(state.detail).then((res) => {
-    console.log('saveDetail', res)
+    // console.log('saveDetail', res)
     state.loading = false
     state.showViewModal = false
     getAdminList()

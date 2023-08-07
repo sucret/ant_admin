@@ -1,15 +1,15 @@
 <template>
   <!-- 右侧header -->
-  <a-layout-header :style="{ background: theme == 'dark' ? '#001529' : '#fff', padding: 0, position: 'fixed', zIndex: 1, width: collapsed ? 'calc(100% - 80px)' : 'calc(100% - 200px)', borderBottom: '1px solid rgba(5, 5, 5, 0.06)' }">
+  <a-layout-header :style="{ background: theme == 'dark' ? '#001529' : '#fff', padding: 0, position: 'fixed', zIndex: 1, width: sideCollapsed ? 'calc(100% - 80px)' : 'calc(100% - 200px)', borderBottom: '1px solid rgba(5, 5, 5, 0.06)' }">
     <div class="header-left-side" >
-      <menu-unfold-outlined
+      <MenuUnfoldOutlined
         class="trigger"
-        v-if="collapsed"
+        v-if="sideCollapsed"
         @click="changeCollapsed"
         :style="{ color: theme == 'dark' ? '#fff' : 'black' }"
       />
-      <menu-fold-outlined
-        v-if="!collapsed"
+      <MenuFoldOutlined
+        v-if="!sideCollapsed"
         class="trigger"
         @click="changeCollapsed"
         :style="{ color: theme == 'dark' ? '#fff' : 'black' }"
@@ -20,7 +20,7 @@
         mode="horizontal"
         :style="{ lineHeight: '50px', height: '50px', float: 'left' }"
         @click="menuClick"
-        :items="menu"/>
+        :items="topMenu"/>
     </div>
     <div class="header-right-side" :style="{ background: theme == 'dark' ? '#001529' : '#fff' }" style="position: fixed; right: 0; height: 50px; border-bottom: 1px solid rgba(5, 5, 5, 0.06);">
       <a-dropdown class="avatar-dropdown" arrow>
@@ -63,7 +63,7 @@
   </a-layout-header>
 </template>
 
-<script>
+<script setup>
 import {
   UserOutlined,
   MenuUnfoldOutlined,
@@ -76,54 +76,27 @@ import {
   DashboardOutlined
 } from '@ant-design/icons-vue'
 
-import { mapState } from 'vuex'
+import { useAppStore } from '../../store/app'
+import { storeToRefs } from 'pinia'
+import { useUserStore } from '../../store/user'
 
-import store from '../../store'
+const appStore = useAppStore()
+const { theme, sideCollapsed } = storeToRefs(appStore)
 
-export default {
-  name: 'RightSideHeaderLayout',
-  components: {
-    UserOutlined,
-    MenuUnfoldOutlined,
-    MenuFoldOutlined,
-    DownOutlined,
-    DeleteOutlined,
-    LogoutOutlined,
-    AppstoreOutlined,
-    SettingOutlined,
-    DashboardOutlined
-  },
-  data() {
-    return {
-      topSelectedKey: ['app']
-    }
-  },
-  methods: {
-    changeTheme() {
-      this.$store.commit('CHANGE_THEME')
-    },
-    changeCollapsed() {
-      this.$store.commit('CHANGE_SIDE_COLLAPSED')
-    },
-    menuClick({ key }) {
-      store.dispatch('SetLeftMenu', key).then(res => {
-        console.log('SetLeftMenu', res)
-      })
-      // console.log('menuClick', key)
-      // 获取到当前的key,并且跳转
-      // this.$router.push({
-      //   path: key
-      // })
-    },
-  },
-  mounted: function () {
-    localStorage.setItem('a', JSON.stringify({ a: 123, b: 'afwne' }))
-  },
-  computed: mapState({
-    theme: state => state.app.theme,
-    collapsed: state => state.app.sideCollapsed,
-    menu: state => state.user.topMenu
-  })
+const userStore = useUserStore()
+const { topMenu, topSelectedKey } = storeToRefs(userStore)
+
+const changeTheme = () => {
+  appStore.changeTheme()
+}
+
+const changeCollapsed = () => {
+  appStore.changeCollapsed()
+}
+
+const menuClick = ({ key }) => {
+  userStore.setLeftMenu(key)
+  
 }
 </script>
 

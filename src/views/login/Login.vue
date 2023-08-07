@@ -34,11 +34,9 @@
               </template>
             </a-input-password>
           </a-form-item>
-          <a-form-item >
-            <a-button type="primary" html-type="submit" class="login-form-button" :span="24" :style="{ width: '100%', display: 'block' }">
-              Log in
-            </a-button>
-          </a-form-item>
+          <a-button type="primary" html-type="submit" class="login-form-button" :style="{ width: '100%' }">
+            Log in
+          </a-button>
         </a-form>
       </a-col>
       <a-col :span="9"></a-col>
@@ -70,10 +68,10 @@ export default {
   },
   methods: {
     onFinish(values) {
-      console.log('Success:', values, this.formState);
+      // console.log('Success:', values, this.formState);
       
       adminLogin(this.formState).then(res => {
-        console.log('login', res)
+        // console.log('login', res)
         // this.$store.commit('SET_TOKEN', res.access_token)
 
         // 登陆完成之后设置token
@@ -85,7 +83,7 @@ export default {
       })
     },
     onFinishFailed(errorInfo) {
-       console.log('Failed:', errorInfo);
+      //  console.log('Failed:', errorInfo);
        this.$message.error('请输入正确的账号信息')
     }
   }

@@ -48,7 +48,7 @@ const errorHandler = (error) => {
 
 // request interceptor
 request.interceptors.request.use(config => {
-  console.log('request', config, config.request)
+  // console.log('request', config, config.request)
   // const token = VueCookie.get('token')
   const token = VueCookie.get('token')
 
@@ -73,10 +73,10 @@ request.interceptors.request.use(config => {
 
 // response interceptor
 request.interceptors.response.use((response) => {
-  console.log('response', response.data)
+  // console.log('response', response.data)
 
   if(response.data.error_code == 40100) {
-    console.log('del_token', VueCookie.delete('token'));
+    // console.log('del_token', VueCookie.delete('token'));
     router.push({ path: '/login' })
   }
   
