@@ -66,7 +66,7 @@ import { h } from 'vue'
 // 页面
 // 接口
 
-import { SmileOutlined } from "@ant-design/icons-vue"
+// import { SmileOutlined } from "@ant-design/icons-vue"
 import { reactive, onMounted } from 'vue';
 import * as antIcons from "@ant-design/icons-vue"
 import { saveNode, getNodeTree, getNodeDetail } from '@/api/node.js'
@@ -97,7 +97,7 @@ const columns = [
     title: '图标',
     dataIndex: 'icon',
     key: 'icon',
-    width: 180,
+    width: 200,
   },
   {
     title: '组件',
@@ -176,14 +176,23 @@ const saveNodeDetail = () => {
 
 const getData = () => {
   getNodeTree().then(data => {
-    for(let k in data) {
-      data[k].icon_component = eval('state.icons["' + data[k].icon + '"]')
+    const makeIconComponent = (list) => {
+      for(let k in list) {
+        list[k].icon_component = eval('state.icons["' + list[k].icon + '"]')
+
+        if (list[k].children) {
+          makeIconComponent(list[k].children)
+        }
+      }
     }
+
+    makeIconComponent(data)
 
     console.log('data', data)
     state.list = data
   })
 }
+
 onMounted(() => {
   // 初始化图标列表
   for (let k in antIcons) {
