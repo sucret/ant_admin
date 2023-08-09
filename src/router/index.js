@@ -34,6 +34,11 @@ const router = createRouter({
           path: 'node/list',
           name: 'nodeList',
           component: () => import('@/views/node/NodeListView.vue')
+        },
+        {
+          path: 'log/system-log',
+          name: 'systemLog',
+          component: () => import('@/views/log/SystemLogView.vue')
         }
       ]
     },

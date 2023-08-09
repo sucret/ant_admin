@@ -8,6 +8,8 @@ import { VueAxios } from './axios'
 // import message from 'ant-design-vue/es/message'
 import VueCookie from 'vue-cookie'
 import router from '../router'
+import { useUserStore } from '../store/user'
+import { pinia } from '../store/pinia'
 
 // 创建 axios 实例
 const request = axios.create({
@@ -75,8 +77,9 @@ request.interceptors.request.use(config => {
 request.interceptors.response.use((response) => {
   // console.log('response', response.data)
 
+  // 返回登陆失效时需要执行一下logout方法，防止浏览器token未失效
   if(response.data.error_code == 40100) {
-    // console.log('del_token', VueCookie.delete('token'));
+    useUserStore(pinia).logout()
     router.push({ path: '/login' })
   }
   

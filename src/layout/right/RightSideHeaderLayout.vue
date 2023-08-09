@@ -42,7 +42,7 @@
               <a-button type="text" size="small"><DeleteOutlined />清理缓存</a-button>
             </a-menu-item>
             <a-menu-item>
-              <a-button type="text" size="small"><LogoutOutlined />退出登陆</a-button>
+              <a-button type="text" @click="logout" size="small"><LogoutOutlined />退出登陆</a-button>
             </a-menu-item>
           </a-menu>
         </template>
@@ -96,7 +96,10 @@ const changeCollapsed = () => {
 
 const menuClick = ({ key }) => {
   userStore.setLeftMenu(key)
-  
+}
+
+const logout = () => {
+  userStore.logout()
 }
 </script>
 

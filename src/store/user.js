@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { h } from 'vue';
 import {
-  PieChartOutlined,
+  // PieChartOutlined,
   MailOutlined,
   DesktopOutlined,
   InboxOutlined,
@@ -16,17 +16,19 @@ import {
 import VueCookie from 'vue-cookie'
 import router from '../router'
 
+import * as Icons from '@ant-design/icons-vue'
+
 import { getAdminProfile } from '@/api/admin.js'
 
 const menu = [
   {
     key: 'dashboard1',
-    icon: () => h(PieChartOutlined),
+    icon: () => h(eval('Icons.PieChartOutlined')),
     label: '工作台',
     children: [
       {
         key: '/dashboard',
-        icon: () => h(PieChartOutlined),
+        icon: () => h(eval('Icons.PieChartOutlined')),
         label: '仪表盘',
       }, {
         key: '/workbench',
@@ -65,7 +67,7 @@ const menu = [
       title: '系统工具',
       icon: () => h(CloudServerOutlined),
       children: [{
-        key: '8',
+        key: '/log/system-log',
         label: '系统日志',
         title: '系统日志',
         icon: () => h(LineChartOutlined),
@@ -132,28 +134,17 @@ export const useUserStore = defineStore('user', {
     }
   },
   actions: {
+    logout () {
+      VueCookie.delete('token')
+      this.token = null
+      router.push('/')
+    },
+    login (token) {
+      VueCookie.set('token', token, { expires: 1 })
+      router.push('/')
+    },
     getUserInfo () {
-      // getAdminProfile().then(res => {
-      //   console.log('adminProfile', res)
-
-      //   let leftMenuList = []
-      //   let topMenuList = []
-      //   let k = 0
-      //   for(k in menu) {
-      //     if (k == 0) {
-      //       leftMenuList = menu[k].children
-      //     }
-      //     topMenuList.push({ key: menu[k].key, icon: menu[k].icon, label: menu[k].label })
-      //   }
-
-      //   this.topMenu = topMenuList
-      //   this.leftMenu = leftMenuList
-      //   this.token = VueCookie.get('token')
-      //   this.menu = menu
-        
-      // })
       return new Promise((resolve, reject) => {
-
         getAdminProfile().then(res => {
           this.nickname = res.nickname
 
@@ -173,6 +164,8 @@ export const useUserStore = defineStore('user', {
           this.menu = menu
 
           resolve()
+        }).catch(err => {
+          reject(err)
         })
       })
     },
@@ -207,10 +200,6 @@ export const useUserStore = defineStore('user', {
 
       // 设置选中的菜单
       this.leftSelectedKey = [firstLeftPath]
-    },
-    clickRightMenu (key) {
-      this.leftSelectedKey = [key]
-      // console.log(key)
     },
     initMenu (key) {
       const menuPath = this.getKeyPath(key, this.menu)

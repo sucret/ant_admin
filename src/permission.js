@@ -4,8 +4,9 @@ import router from './router'
 import VueCookie from 'vue-cookie'
 
 import { useUserStore } from './store/user'
-import { useAppStore } from './store/app'
 import { pinia } from './store/pinia'
+
+import message from 'ant-design-vue/es/message'
 
 const LOGIN_ROUTER_PATH = '/login'
 const DEFAULT_ROUTER_PATH = '/dashboard'
@@ -15,7 +16,6 @@ router.beforeEach(async (to, from) => {
   const token = VueCookie.get('token')
 
   let userStore = useUserStore(pinia)
-  let appStore = useAppStore(pinia)
   console.log(to.fullPath)
   console.log('beforeEach', from, to, token)
   if (token) {
@@ -24,6 +24,8 @@ router.beforeEach(async (to, from) => {
       userStore.getUserInfo().then(res => {
         // 初始化一下菜单
         userStore.initMenu(to.fullPath)
+      }).catch(err => {
+        message.error(err.message)
       })
     }
 

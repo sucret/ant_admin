@@ -20,14 +20,14 @@
             labelCol: { span: 6 },
             wrapperCol: { span: 18 },
           }">
-          <a-form-item label="Mobile" name="mobile" :rules="[{ required: true, message: 'Please input your mobile!' }]">
+          <a-form-item label="Mobile" name="mobile" :rules="[{ required: true, message: '请输入手机号！' }]">
             <a-input v-model:value="formState.mobile">
               <template #prefix>
                 <UserOutlined class="site-form-item-icon" />
               </template>
             </a-input>
           </a-form-item>
-          <a-form-item label="Password" name="password" :rules="[{ required: true, message: 'Please input your password!' }]">
+          <a-form-item label="Password" name="password" :rules="[{ required: true, message: '请输入密码！' }]">
             <a-input-password v-model:value="formState.password">
               <template #prefix>
                 <LockOutlined class="site-form-item-icon" />
@@ -45,48 +45,29 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import { UserOutlined, LockOutlined } from '@ant-design/icons-vue';
-
 import { adminLogin } from '@/api/admin'
-// import store from '@/store'
-import VueCookie from 'vue-cookie'
+import { useUserStore } from '../../store/user'
+import message from 'ant-design-vue/es/message'
+import { reactive } from 'vue'
 
-export default {
-  name: 'LoginView',
-  components: {
-    UserOutlined,
-    LockOutlined
-  },
-  data() {
-    return {
-      formState: {
-        mobile: '',
-        password: ''
-      }
-    }
-  },
-  methods: {
-    onFinish(values) {
-      // console.log('Success:', values, this.formState);
-      
-      adminLogin(this.formState).then(res => {
-        // console.log('login', res)
-        // this.$store.commit('SET_TOKEN', res.access_token)
+const userStore = useUserStore()
+const formState = reactive({
+  mobile: '',
+  password: ''
+})
 
-        // 登陆完成之后设置token
-        VueCookie.set('token', res.access_token)
+const onFinish = (values) => {
+  adminLogin(formState).then(res => {
+    userStore.login(res.access_token)
+  }).catch(err => {
+    message.error(err)
+  })
+}
 
-        this.$router.push('/dashboard')
-      }).catch(err => {
-        this.$message.error(err)
-      })
-    },
-    onFinishFailed(errorInfo) {
-      //  console.log('Failed:', errorInfo);
-       this.$message.error('请输入正确的账号信息')
-    }
-  }
+const onFinishFailed = (errorInfo) => {
+  message.error('请输入正确的账号信息')
 }
 </script>
 

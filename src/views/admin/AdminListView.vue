@@ -30,11 +30,6 @@
         <a-button key="back" @click="handleCancel">取消</a-button>
         <a-button v-show="!state.modalReadonly" key="submit" type="primary" :loading="state.loading" @click="saveAdminInfo">提交</a-button>
       </template>
-      <!-- <p>Some contents...</p>
-      <p>Some contents...</p>
-      <p>Some contents...</p>
-      <p>Some contents...</p>
-      <p>Some contents...</p> -->
     </a-modal>
   </a-card>
 </template>
