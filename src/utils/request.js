@@ -11,6 +11,8 @@ import router from '../router'
 import { useUserStore } from '../store/user'
 import { pinia } from '../store/pinia'
 
+// import NProgress from 'nprogress'
+
 // 创建 axios 实例
 const request = axios.create({
   // API 请求的默认前缀
@@ -50,6 +52,7 @@ const errorHandler = (error) => {
 
 // request interceptor
 request.interceptors.request.use(config => {
+  // NProgress.set(0.4)
   // console.log('request', config, config.request)
   // const token = VueCookie.get('token')
   const token = VueCookie.get('token')

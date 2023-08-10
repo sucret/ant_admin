@@ -10,11 +10,11 @@
         :columns="state.columns"
         :indent-size="12"
         bordered
-        :default-expand-all-rows="true"
         :data-source="state.list"
         :row-key="record => record.node_id"
         rowKey="node_id"
         :pagination="false"
+        v-model:expanded-row-keys="state.expandedRowKeys"
         :scroll="{ x: 500 }">
         <template #bodyCell="{ column, record }">
           <template v-if="column.key === 'type'">
@@ -24,7 +24,11 @@
             <a-tag v-if="record.type == 4" color="purple">#接口</a-tag>
           </template>
           <template v-else-if="column.key === 'icon'">
-            <component class="icon" :is="record.icon_component" />&nbsp;&nbsp;&nbsp;{{ record.icon }}
+            <a-tag color="processing">
+              <template #icon>
+                <component class="icon" :is="record.icon_component"/>&nbsp;{{ record.icon }}
+              </template>
+            </a-tag>
           </template>
           <template v-else-if="column.key === 'action'">
             <a @click="showDetail(0, record.node_id)">新增子节点</a>
@@ -133,7 +137,8 @@ const state = reactive({
     type: 1,
     icon: ''
   },
-  icons: {}
+  icons: {},
+  expandedRowKeys: []
 })
 
 const showDetail = (nodeId = 0, parentNodeId = 0, readonly = false) => {
@@ -176,19 +181,22 @@ const saveNodeDetail = () => {
 
 const getData = () => {
   getNodeTree().then(data => {
-    const makeIconComponent = (list) => {
+    state.expandedRowKeys = []
+    const formatData = (list) => {
       for(let k in list) {
+        if (list[k].type == 1) {
+          state.expandedRowKeys.push(list[k].node_id)
+        }
+
         list[k].icon_component = eval('state.icons["' + list[k].icon + '"]')
 
         if (list[k].children) {
-          makeIconComponent(list[k].children)
+          formatData(list[k].children)
         }
       }
     }
 
-    makeIconComponent(data)
-
-    console.log('data', data)
+    formatData(data)
     state.list = data
   })
 }

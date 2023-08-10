@@ -95,6 +95,7 @@ const changeCollapsed = () => {
 }
 
 const menuClick = ({ key }) => {
+  // console.log('menuClick', item, key)
   userStore.setLeftMenu(key)
 }
 

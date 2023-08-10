@@ -40,8 +40,9 @@ const { leftMenu, leftSelectedKey, leftOpenKeys } = storeToRefs(userStore)
 
 const router = useRouter()
 
-const menuClick = ({ key }) => {
-  router.push({ path: key })
+const menuClick = ({ item, key }) => {
+  console.log('click menu', key, item)
+  router.push({ path: item.path })
   // userStore.clickRightMenu(key)
 }
 </script>

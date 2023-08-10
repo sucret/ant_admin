@@ -15,7 +15,7 @@ import {
 } from '@ant-design/icons-vue';
 import VueCookie from 'vue-cookie'
 import router from '../router'
-
+import { genRouters } from '../router/gen-routers'
 import * as Icons from '@ant-design/icons-vue'
 
 import { getAdminProfile } from '@/api/admin.js'
@@ -148,6 +148,28 @@ export const useUserStore = defineStore('user', {
         getAdminProfile().then(res => {
           this.nickname = res.nickname
 
+          const formatNode = (list) => {
+            for(let k in list) {
+              list[k].key = list[k].path ? list[k].path : (list[k].node_id + "")
+              list[k].icon = list[k].icon ? h(eval('Icons.' + list[k].icon)) : ''
+              list[k].label = list[k].title
+
+              if (list[k].children) {
+                formatNode(list[k].children)
+              } else {
+                delete list[k].children
+              }
+
+              if (!list[k].component) {
+                delete list[k].component
+              }
+            }
+          }
+
+          formatNode(res.node_list)
+
+          let menu = res.node_list
+          console.log('aa', res.node_list)
           let leftMenuList = []
           let topMenuList = []
           let k = 0
@@ -170,19 +192,22 @@ export const useUserStore = defineStore('user', {
       })
     },
     setLeftMenu (key) {
-      let k = 0
-      for(k in this.menu) {
+      console.log(this.menu, key)
+      for(let k in this.menu) {
+        console.log('kkk', key, this.menu[k].key)
         if (key == this.menu[k].key) {
           this.leftMenu = this.menu[k].children
           break;
         }
       }
 
+      console.log('leftMenu', this.leftMenu)
       this.topSelectedKey = [key]
 
       // 跳转到子菜单第一个页面
       this.leftOpenKeys = []
 
+      console.log('topSelectedKey', this.topSelectedKey)
       let getFirstView = (menuList) => {
         let k = 0
         for(k in menuList) {
@@ -195,15 +220,19 @@ export const useUserStore = defineStore('user', {
         }
       }
 
+      console.log('leftMenu', this.leftMenu)
       const firstLeftPath = getFirstView(this.leftMenu)
+
+      // console.log('firstLeftPath', firstLeftPath, leftSelectedKey)
       router.push({ path: firstLeftPath })
 
       // 设置选中的菜单
       this.leftSelectedKey = [firstLeftPath]
     },
-    initMenu (key) {
+    async initMenu (key) {
       const menuPath = this.getKeyPath(key, this.menu)
 
+      console.log('menuPath', menuPath)
       // 顶部菜单
       const topSelected = menuPath.shift()
       this.topSelectedKey = topSelected ? [topSelected] : []
@@ -246,6 +275,9 @@ export const useUserStore = defineStore('user', {
 
       getFullPath(key, [], menuList)
       return result
+    },
+    genRouter () {
+      return genRouters(this.menu)
     }
   }
 })
