@@ -1,8 +1,6 @@
 import { defineAsyncComponent } from 'vue'
 
 export const routerComponents = {
-  BasicLayout: () => import('../layout/BasicLayout.vue'),
-
   // 工作台
   Dashboard: () => import('@/views/dashboard/DashboardView.vue'),
   Workbench: () => import('@/views/dashboard/WorkbenchView.vue'),
@@ -12,20 +10,14 @@ export const routerComponents = {
   RoleListView: () => import('../views/role/RoleListView.vue'),
   NodeListView: () => import('@/views/node/NodeListView.vue'),
   SystemLogView: () => import('../views/log/SystemLogView.vue'),
-  ActionLogView: () => import('../views/log/ActionLogView.vue')
+  ActionLogView: () => import('../views/log/ActionLogView.vue'),
 
-}
+  MysqlToolView: () => import('../views/database/MysqlToolView.vue'),
+  RedisToolView: () => import('../views/database/RedisToolView.vue')
 
-const rootRouter = {
-  path: '',
-  name: 'index',
-  component: () => routerComponents.BasicLayout,
-  children: []
 }
 
 export const genRouters = (menuList) => {
-  console.log('genRouters', menuList)
-
   const childrenNav = []
   const makeRouter = (list) => {
     for(let item of list) {
@@ -33,7 +25,10 @@ export const genRouters = (menuList) => {
         childrenNav.push({
           path: item.path,
           name: item.component,
-          component: routerComponents[item.component]
+          component: routerComponents[item.component],
+          meta: {
+            keepAlive: true
+          }
         })
       }
 
@@ -45,7 +40,4 @@ export const genRouters = (menuList) => {
   makeRouter(menuList)
 
   return childrenNav
-  // rootRouter.children = childrenNav
-
-  // return rootRouter
 }

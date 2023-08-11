@@ -21,7 +21,7 @@
     <a-form-item label="角色">
       <a-checkbox-group v-model:value="detail.role" :disabled="readonly">
         <a-row>
-          <a-col :span="8" v-for="(role, k) in detail.role_list" v-bind:key="k">
+          <a-col :span="8" v-for="(role, k) in state.roleList" v-bind:key="k">
             <a-checkbox style="line-height: 32px" :value="role.role_id" name="role">{{ role.name }}</a-checkbox>
           </a-col>
         </a-row>
@@ -32,12 +32,24 @@
 
 <script setup>
 
+import { roleList  } from '@/api/role'
+import { reactive, onMounted } from 'vue';
+
+const state = reactive({
+  roleList: []
+})
 const props = defineProps({
   readonly: {
     type: Boolean,
     default: true
   },
   detail: {}
+})
+
+onMounted(() => {
+  roleList().then(data => {
+    state.roleList = data
+  })
 })
 
 </script>

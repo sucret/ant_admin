@@ -1,45 +1,44 @@
 <template>
   <div>
-    <a-card :bordered="false" style="margin-top: 20px">
-      <a-row :gutter="16" style="padding-bottom: 20px;">
-        <a-col :span="22"></a-col>
-        <a-col  :span="2"><a-button type="primary" @click="showDetail(0, 0, false)">新增</a-button></a-col>
-      </a-row>
-      
-      <a-table size="middle"
-        :columns="state.columns"
-        :indent-size="12"
-        bordered
-        :data-source="state.list"
-        :row-key="record => record.node_id"
-        rowKey="node_id"
-        :pagination="false"
-        v-model:expanded-row-keys="state.expandedRowKeys"
-        :scroll="{ x: 500 }">
-        <template #bodyCell="{ column, record }">
-          <template v-if="column.key === 'type'">
-            <a-tag v-if="record.type == 1" color="pink">#菜单</a-tag>
-            <a-tag v-if="record.type == 2" color="green">#菜单&页面</a-tag>
-            <a-tag v-if="record.type == 3" color="cyan">#页面</a-tag>
-            <a-tag v-if="record.type == 4" color="purple">#接口</a-tag>
-          </template>
-          <template v-else-if="column.key === 'icon'">
-            <a-tag color="processing">
-              <template #icon>
-                <component class="icon" :is="record.icon_component"/>&nbsp;{{ record.icon }}
-              </template>
-            </a-tag>
-          </template>
-          <template v-else-if="column.key === 'action'">
-            <a @click="showDetail(0, record.node_id)">新增子节点</a>
-            <a-divider type="vertical" />
-            <a @click="showDetail(record.node_id, 0, true)">编辑</a>
-            <a-divider type="vertical" />
-            <a>删除</a>
-          </template>
+    <a-space style="margin-bottom: 14px">
+      <a-button type="primary" @click="showDetail(0, 0, false)">新增节点</a-button>
+      <a-button type="primary" @click="expandAll">全部展开</a-button>
+      <a-button type="primary" @click="closeAll">全部收起</a-button>
+    </a-space>
+    
+    <a-table size="middle"
+      :columns="state.columns"
+      :indent-size="12"
+      bordered
+      :data-source="state.list"
+      :row-key="record => record.node_id"
+      rowKey="node_id"
+      :pagination="false"
+      v-model:expanded-row-keys="state.expandedRowKeys"
+      :scroll="{ x: 500 }">
+      <template #bodyCell="{ column, record }">
+        <template v-if="column.key === 'type'">
+          <a-tag v-if="record.type == 1" color="pink">#菜单</a-tag>
+          <a-tag v-if="record.type == 2" color="green">#菜单&页面</a-tag>
+          <a-tag v-if="record.type == 3" color="cyan">#页面</a-tag>
+          <a-tag v-if="record.type == 4" color="purple">#接口</a-tag>
         </template>
-      </a-table>
-    </a-card>
+        <template v-else-if="column.key === 'icon'">
+          <a-tag color="processing" v-if="record.icon">
+            <template #icon>
+              <component class="icon" :is="record.icon_component"/>&nbsp;{{ record.icon }}
+            </template>
+          </a-tag>
+        </template>
+        <template v-else-if="column.key === 'action'">
+          <a @click="showDetail(0, record.node_id)">新增子节点</a>
+          <a-divider type="vertical" />
+          <a @click="showDetail(record.node_id, 0, true)">编辑</a>
+          <a-divider type="vertical" />
+          <a>删除</a>
+        </template>
+      </template>
+    </a-table>
 
     <a-modal v-model:open="state.showViewModal" :title="state.title" :width="600" @ok="saveNodeDetail">
       <NodeDetailView
@@ -57,20 +56,6 @@
 
 <script setup>
 
-import { h } from 'vue'
-// const iconName = 'UserAddOutlined'
-// const str = 'import ' + iconName + ' from "@ant-design/icons-vue"'
-// console.log(str)
-// eval(str)
-// eval('import ' + iconName + 'from "@ant-design/icons-vue"' )
-// const name = 'SearchOutlined'
-// import name from '@ant-design/icons-vue'
-
-// 菜单
-// 页面
-// 接口
-
-// import { SmileOutlined } from "@ant-design/icons-vue"
 import { reactive, onMounted } from 'vue';
 import * as antIcons from "@ant-design/icons-vue"
 import { saveNode, getNodeTree, getNodeDetail } from '@/api/node.js'
@@ -177,6 +162,24 @@ const saveNodeDetail = () => {
     state.loading = false
     getData()
   })
+}
+
+const closeAll = () => {
+  state.expandedRowKeys = []
+}
+
+const expandAll = () => {
+  state.expandedRowKeys = []
+  const getAllKeys = (list) => {
+    for(let k in list) {
+      state.expandedRowKeys.push(list[k].node_id)
+      if (list[k].children) {
+        getAllKeys(list[k].children)
+      }
+    }
+  }
+
+  getAllKeys(state.list)
 }
 
 const getData = () => {
