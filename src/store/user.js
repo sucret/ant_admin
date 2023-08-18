@@ -169,7 +169,6 @@ export const useUserStore = defineStore('user', {
           formatNode(res.node_list)
 
           let menu = res.node_list
-          console.log('aa', res.node_list)
           let leftMenuList = []
           let topMenuList = []
           let k = 0
@@ -232,7 +231,6 @@ export const useUserStore = defineStore('user', {
     async initMenu (key) {
       const menuPath = this.getKeyPath(key, this.menu)
 
-      console.log('menuPath', menuPath)
       // 顶部菜单
       const topSelected = menuPath.shift()
       this.topSelectedKey = topSelected ? [topSelected] : []

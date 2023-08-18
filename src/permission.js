@@ -70,8 +70,8 @@ export const initRouter = async () => {
         router.addRoute('basic', r)
       })
       // router.addRoute(routers)
-      console.log('router1s', routers, router)
-      console.log('gerRoutes', router.getRoutes())
+      // console.log('router1s', routers, router)
+      // console.log('gerRoutes', router.getRoutes())
       // next({ ...to, replace: true })
     })
   }

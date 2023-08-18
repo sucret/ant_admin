@@ -4,6 +4,8 @@
   </a-space>
   <div class="list">
     <a-table :dataSource="state.list"
+      size="middle"
+      bordered
       :columns="state.columns"
       :row-key="record => record.admin_id"
       rowKey="admin_id">

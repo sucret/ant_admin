@@ -13,7 +13,10 @@ export const routerComponents = {
   ActionLogView: () => import('../views/log/ActionLogView.vue'),
 
   MysqlToolView: () => import('../views/database/MysqlToolView.vue'),
-  RedisToolView: () => import('../views/database/RedisToolView.vue')
+  RedisToolView: () => import('../views/database/RedisToolView.vue'),
+
+  CronTaskListView: () => import('@/views/cron-task/CronTaskListView.vue'),
+  CronTaskLogListView: () => import('@/views/cron-task/CronTaskLogListView.vue'),
 
 }
 

@@ -80,6 +80,7 @@ request.interceptors.request.use(config => {
 request.interceptors.response.use((response) => {
   // console.log('response', response.data)
 
+  console.log('response', response.config.url, response.data)
   // 返回登陆失效时需要执行一下logout方法，防止浏览器token未失效
   if(response.data.error_code == 40100) {
     useUserStore(pinia).logout()
